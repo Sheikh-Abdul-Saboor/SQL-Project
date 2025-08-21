@@ -1,6 +1,63 @@
+-- Create Database
+CREATE DATABASE FreelancePlatformDB;
+USE FreelancePlatformDB;
+
+-- Payment Table (Base table)
+CREATE TABLE Payment (
+    PaymentID INT PRIMARY KEY AUTO_INCREMENT,
+    PaymentDate DATE,
+    Amount DECIMAL(10,2),
+    Status VARCHAR(50)
+);
+
+-- Contract Table
+CREATE TABLE Contract (
+    ContractId INT PRIMARY KEY AUTO_INCREMENT,
+    StartDate DATE,
+    EndDate DATE,
+    AgreedAmount DECIMAL(10,2),
+    DeliverableLinks TEXT,
+    PaymentID INT,
+    FOREIGN KEY (PaymentID) REFERENCES Payment(PaymentID)
+);
+
+-- Message Table
+CREATE TABLE Message (
+    MessageId INT PRIMARY KEY AUTO_INCREMENT,
+    TimeStamp DATETIME,
+    Content TEXT,
+    SenderId INT,
+    ReceiverId INT
+);
+
+-- Bid Table
+CREATE TABLE Bid (
+    BidId INT PRIMARY KEY AUTO_INCREMENT,
+    BidAmount DECIMAL(10,2),
+    DeliveryTime VARCHAR(50),
+    ProposalDescription TEXT,
+    BidDate DATE,
+    Status VARCHAR(50),
+    ContractId INT,
+    FOREIGN KEY (ContractId) REFERENCES Contract(ContractId)
+);
+
+-- Project Table
+CREATE TABLE Project (
+    ProjectId INT PRIMARY KEY AUTO_INCREMENT,
+    Title VARCHAR(200) NOT NULL,
+    Description TEXT,
+    Budget DECIMAL(10,2),
+    Deadline DATE,
+    Status VARCHAR(50),
+    CreatedDate DATE,
+    BidId INT,
+    FOREIGN KEY (BidId) REFERENCES Bid(BidId)
+);
+
 -- Freelancer Table
 CREATE TABLE Freelancer (
-    FreelancerID INT PRIMARY KEY,
+    FreelancerID INT PRIMARY KEY AUTO_INCREMENT,
     Name VARCHAR(100) NOT NULL,
     Password VARCHAR(100) NOT NULL,
     PhoneNumber VARCHAR(20),
@@ -17,7 +74,7 @@ CREATE TABLE Freelancer (
 
 -- Client Table
 CREATE TABLE Client (
-    ClientID INT PRIMARY KEY,
+    ClientID INT PRIMARY KEY AUTO_INCREMENT,
     Name VARCHAR(100) NOT NULL,
     Password VARCHAR(100) NOT NULL,
     CompanyName VARCHAR(100),
@@ -28,59 +85,6 @@ CREATE TABLE Client (
     MessageId INT,
     FOREIGN KEY (ProjectId) REFERENCES Project(ProjectId),
     FOREIGN KEY (MessageId) REFERENCES Message(MessageId)
-);
-
--- Project Table
-CREATE TABLE Project (
-    ProjectId INT PRIMARY KEY,
-    Title VARCHAR(200) NOT NULL,
-    Description TEXT,
-    Budget DECIMAL(10,2),
-    Deadline DATE,
-    Status VARCHAR(50),
-    CreatedDate DATE,
-    BidId INT,
-    FOREIGN KEY (BidId) REFERENCES Bid(BidId)
-);
-
--- Bid Table
-CREATE TABLE Bid (
-    BidId INT PRIMARY KEY,
-    BidAmount DECIMAL(10,2),
-    DeliveryTime VARCHAR(50),
-    ProposalDescription TEXT,
-    BidDate DATE,
-    Status VARCHAR(50),
-    ContractId INT,
-    FOREIGN KEY (ContractId) REFERENCES Contract(ContractId)
-);
-
--- Contract Table
-CREATE TABLE Contract (
-    ContractId INT PRIMARY KEY,
-    EndDate DATE,
-    StartDate DATE,
-    AgreedAmount DECIMAL(10,2),
-    DeliverableLinks TEXT,
-    PaymentID INT,
-    FOREIGN KEY (PaymentID) REFERENCES Payment(PaymentID)
-);
-
--- Message Table
-CREATE TABLE Message (
-    MessageId INT PRIMARY KEY,
-    TimeStamp DATETIME,
-    Content TEXT,
-    SenderId INT,
-    ReceiverId INT
-);
-
--- Payment Table
-CREATE TABLE Payment (
-    PaymentID INT PRIMARY KEY,
-    PaymentDate DATE,
-    Amount DECIMAL(10,2),
-    Status VARCHAR(50)
 );
 
 -- Freelancer Email Table
